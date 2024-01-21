@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
-import { FIREBASE_AUTH } from "../../../config/FirebaseConfig";
+import { FIREBASE_AUTH, FIREBASE_DB } from "../../../config/FirebaseConfig";
 import { useNavigation } from "@react-navigation/native";
 import { BGImage1, Logo, defAvatar } from "../../../assets";
 import * as ImagePicker from "expo-image-picker";
@@ -23,6 +23,7 @@ import UserInputTextField from "../../../components/authComponents/UserInputText
 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../App";
+import { Firestore, setDoc, doc } from "firebase/firestore";
 
 type SignUpScreenProp = NativeStackNavigationProp<RootStackParamList, "Login">;
 
@@ -69,6 +70,7 @@ const SignUp: React.FC = () => {
   const navigation = useNavigation<SignUpScreenProp>();
 
   const auth = FIREBASE_AUTH;
+  const firebase_db = FIREBASE_DB;
 
   const signUp = async () => {
     setLoading(true);
@@ -80,11 +82,18 @@ const SignUp: React.FC = () => {
       ).then(async (userCred) => {
         const user = userCred.user;
         await sendEmailVerification(user);
+        const data = {
+          _id: userCred.user.uid,
+          fullName: name,
+          profilePic: avatar,
+          providerData: userCred.user.providerData[0],
+        };
         updateProfile(user, {
           displayName: name,
           photoURL: avatar ? avatar : defAvatar,
-        }).then(() => {
-          alert("Registered, please login.");
+        });
+        setDoc(doc(firebase_db, "user", userCred.user.uid), data).then(() => {
+          navigation.navigate("Login");
         });
       });
       console.log(response);
@@ -128,9 +137,11 @@ const SignUp: React.FC = () => {
                 className="w-full h-full "
                 resizeMode="contain"
               />
-              
             )}
           </TouchableOpacity>
+          <Text className="py-2 text-center text-primaryText text-xl front-semibold ">
+            {""}upload your Pic
+          </Text>
         </View>
 
         <View className="container ">

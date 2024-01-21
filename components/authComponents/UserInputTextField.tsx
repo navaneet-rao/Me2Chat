@@ -1,14 +1,12 @@
 import React, { Component, useLayoutEffect, useState } from "react";
 import {
   View,
-  Text,
   TextInput,
   NativeSyntheticEvent,
   TextInputChangeEventData,
   TouchableOpacity,
 } from "react-native";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
-
 
 interface UserInputTextFieldProps {
   placeholder: string; // Provide a type annotation for the placeholder prop
@@ -21,9 +19,9 @@ const UserInputTextField: React.FC<UserInputTextFieldProps> = ({
   handleChange,
   isPass,
 }) => {
-  const [InputValue, setInputValue] = useState("");
-  const [showPass, setShowPass] = useState(true);
-  const [icon, setIcon] = useState<"lock"  | "person" | "email" >() ;
+  const [InputValue, setInputValue] = useState<string>("");
+  const [showPass, setShowPass] = useState<boolean>(true);
+  const [icon, setIcon] = useState<"lock" | "person" | "email">();
 
   const handleChangeEvent = (
     e: NativeSyntheticEvent<TextInputChangeEventData>

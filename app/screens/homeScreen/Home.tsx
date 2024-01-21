@@ -1,11 +1,11 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React from 'react'
 
 const Home = () => {
   return (
-    <View>
+    <ScrollView className='bg-[#8effbb]'>
       <Text>Home</Text>
-    </View>
+    </ScrollView>
   )
 }
 
