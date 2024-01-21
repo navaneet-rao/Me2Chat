@@ -2,7 +2,7 @@ import { View, Text, Dimensions, Image, TouchableOpacity, TextInput, ActivityInd
 import React, { useState} from 'react'
 import { FIREBASE_AUTH } from '../../../config/FirebaseConfig';
 import { Link, useNavigation } from "@react-navigation/native";
-import { BGImage, BGImage1, Logo } from "../../../assets"
+import {  BGImage1, Logo } from "../../../assets"
 
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -52,8 +52,8 @@ const Login: React.FC = () => {
           Login to your Account
         </Text>
         <View className="container ">
-          <UserInputTextField placeholder={"Email"} handleChange={(data: React.SetStateAction<string>) => setEmail(data)} />
-          <UserInputTextField placeholder={"Password"} handleChange={(data: React.SetStateAction<string>) => setPassword(data)}/>
+          <UserInputTextField placeholder={"Email"} handleChange={(data: React.SetStateAction<string>) => setEmail(data)} isPass={false} />
+          <UserInputTextField placeholder={"Password"} handleChange={(data: React.SetStateAction<string>) => setPassword(data)} isPass={true}/>
         {loading? ( <ActivityIndicator size="large" color="#0000ff" className="py-10"/> 
         ) : (
           <View className="py-3 flex  ">

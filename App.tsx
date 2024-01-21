@@ -18,16 +18,7 @@ export type RootStackParamList = {
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-const AuthenticationUserContext = createContext({})
 
-const AuthenticationUserProvider = ({childern}) => {
-  const [user, setUser] = useState(null);
-  return(
-    <AuthenticationUserContext.Provider value={{ user, setUser }}>
-      {childern}
-    </AuthenticationUserContext.Provider>
-  )
-}
 
 export default function App() {
   return (
@@ -36,8 +27,8 @@ export default function App() {
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='Login' component={Login}/>
             <Stack.Screen name='SignUp' component={SignUp}/>
-            {/* <Stack.Screen name='Home' component={Home}/>
-            <Stack.Screen name='Chat' component={Chat}/> */}
+            {/* <Stack.Screen name='Home' component={Home}/> */}
+            {/* <Stack.Screen name='Chat' component={Chat}/> */}
           </Stack.Navigator>
       </NavigationContainer>
     </>

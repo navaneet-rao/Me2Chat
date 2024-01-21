@@ -4,9 +4,9 @@ export default {
   expo: {
     name: "Me2Chat",
     slug: "Me2Chat",
-    version: "2.1.5",
+    version: "3.2.7",
     orientation: "portrait",
-    icon: "./assets/icon.png",
+    icon: "./assets/images/appIcon.png",
     userInterfaceStyle: "light",
     splash: {
       image: "./assets/splash.png",
@@ -19,8 +19,7 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/adaptive-icon.png",
-        backgroundColor: "#ffffff",
+        foregroundImage: "./assets/images/appIcon.png",
       },
       package: "com.anonymous.reactfirebasechatapp",
     },

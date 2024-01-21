@@ -4,15 +4,15 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
-  Button,
   ScrollView,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { FIREBASE_AUTH } from "../../../config/FirebaseConfig";
 import { useNavigation } from "@react-navigation/native";
-import { BGImage, BGImage1, BGImage2, Logo } from "../../../assets";
+import { BGImage1, Logo, defAvatar } from "../../../assets";
+import * as ImagePicker from "expo-image-picker";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -31,7 +31,38 @@ const SignUp: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [avatar, setAvatar] = useState("");
+
+  // Stores the selected image URI
+  const [error, setError] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+
+  // Function to pick an image from
+  //the device's media library
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (status !== "granted") {
+      // If permission is denied, show an alert
+      Alert.alert(
+        "Permission Denied",
+        `Sorry, we need camera  
+        roll permission to upload images.`
+      );
+    } else {
+      // Launch the image library and get
+      // the selected image
+      const result: ImagePicker.ImagePickerResult =
+        await ImagePicker.launchImageLibraryAsync();
+
+      if (!result.canceled) {
+        // If an image is selected (not cancelled),
+        // update the file state variable
+        setAvatar(result.uri);
+        // Clear any previous errors
+        setError(null);
+      }
+    }
+  };
 
   const [loading, setLoading] = useState(false);
 
@@ -51,9 +82,7 @@ const SignUp: React.FC = () => {
         await sendEmailVerification(user);
         updateProfile(user, {
           displayName: name,
-          photoURL: avatar
-            ? avatar
-            : "https://gravatar.com/avatar/94d45dbdba988afacf30d916e7aaad69?s=200&d=mp&r=x",
+          photoURL: avatar ? avatar : defAvatar,
         }).then(() => {
           alert("Registered, please login.");
         });
@@ -78,28 +107,51 @@ const SignUp: React.FC = () => {
           Hello There!!!{"\n"}
           Lets Create your Account
         </Text>
+
+        <View className="w-full flex items-center justify-center relative -my-4">
+          <TouchableOpacity
+            onPress={pickImage}
+            className="w-20 h-20 p-1 rounded-full  bg-[#ecb158]"
+          >
+            {avatar ? (
+              // Display the selected image
+              <Image
+                source={{ uri: avatar }}
+                className="w-full h-full rounded-full "
+                resizeMode="cover"
+              />
+            ) : (
+              // Display an error message if there's
+              // an error or no image selected
+              <Image
+                source={defAvatar}
+                className="w-full h-full "
+                resizeMode="contain"
+              />
+              
+            )}
+          </TouchableOpacity>
+        </View>
+
         <View className="container ">
-          <UserInputTextField
-            placeholder={"Avatar"}
-            handleChange={(data: React.SetStateAction<string>) =>
-              setEmail(data)
-            }
-          />
           <UserInputTextField
             placeholder={"Email"}
             handleChange={(data: React.SetStateAction<string>) =>
               setEmail(data)
             }
+            isPass={false}
           />
           <UserInputTextField
             placeholder={"Name"}
             handleChange={(data: React.SetStateAction<string>) => setName(data)}
+            isPass={false}
           />
           <UserInputTextField
             placeholder={"Password"}
             handleChange={(data: React.SetStateAction<string>) =>
               setPassword(data)
             }
+            isPass={true}
           />
           {loading ? (
             <ActivityIndicator size="large" color="#0000ff" />
